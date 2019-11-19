@@ -11,7 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import io.efip.farmasalud.dao.PedidoRepository;
+import io.efip.farmasalud.dao.DetallePedidoRepository;
+import io.efip.farmasalud.model.DetallePedido;
 import io.efip.farmasalud.model.Pedido;
 
 @SpringBootTest
@@ -22,21 +23,23 @@ public class PedidoServiceTest {
     private PedidoService pedidoService;
     
     @MockBean
-    private PedidoRepository pedidoRepositoryMock;
+    private DetallePedidoRepository detallePedidoRepositoryMock;
     
     @Test
     public void testRegistraPedido() {
         
-        Pedido pedidoIn = new Pedido();
-        pedidoIn.setNombre("pedido 10");
-        pedidoIn.setDescripcion("pedido 10");
+        Pedido pedido = new Pedido();
+        pedido.setNombre("pedido 10");
+        pedido.setDescripcion("pedido 10");
+
+        DetallePedido pedidoIn = new DetallePedido();
+        pedidoIn.setCantidad(10);
+        pedidoIn.setPedido(pedido);
         
-        Pedido pedidoOut = new Pedido();
-        pedidoOut.setId(10L);
-        pedidoOut.setNombre(pedidoIn.getNombre());
-        pedidoOut.setDescripcion(pedidoIn.getDescripcion());
+        DetallePedido pedidoOut = new DetallePedido();
+        pedidoOut.setId(10L);        
         
-        when(this.pedidoRepositoryMock.save(any(Pedido.class))).thenReturn(pedidoOut);
+        when(this.detallePedidoRepositoryMock.save(any(DetallePedido.class))).thenReturn(pedidoOut);
         Long pedidoId = pedidoService.registrarPedido(pedidoIn);
 
         Long expected[] = {pedidoId};
